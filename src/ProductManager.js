@@ -125,7 +125,6 @@ productManager.loadProducts();
   
   // Obtener todos los productos
   const allProducts = productManager.getProducts();
-  console.log(allProducts);
   
   // Obtener producto por ID
 //   const productId = 1;
@@ -150,3 +149,5 @@ const productIdToDelete = 1;
 productManager.deleteProduct(productIdToDelete);
 
 // Para correr codigo en node (node ProductManager.js)
+
+module.exports = ProductManager;
