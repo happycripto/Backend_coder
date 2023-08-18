@@ -1,14 +1,15 @@
 const fs = require('fs');
 
 class ProductManager {
-    constructor(filePath) {
+    constructor() {
         this.products = [];
         this.productIdCounter = 1; // Para asignar un ID autoincrementable
-        this.path = filePath;
+        this.path = 'products.json'; // Cambiar 'data.json' a './data/products.json'
     }
 
     loadProducts() {
         try {
+            console.log('Ruta del archivo products.json:', this.path);
             const data = fs.readFileSync(this.path, 'utf-8');
             this.products = JSON.parse(data);
             this.productIdCounter = this.products.reduce((maxId, product) => Math.max(maxId, product.id), 0) + 1;
@@ -24,6 +25,7 @@ class ProductManager {
     saveProducts() {
         fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2), 'utf-8');
     }
+    
     
     addProduct(product) {
         if (!product.title || !product.description || !product.price || !product.thumbnail || !product.code || !product.stock) {
