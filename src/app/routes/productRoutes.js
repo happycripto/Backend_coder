@@ -1,6 +1,6 @@
-const express = require('express');
-const router = express.Router();
-const ProductManager = require('../ProductManager');
+import { Router } from 'express';
+const router = Router();
+import ProductManager from '../dao/ProductManager.js';
 
 const productManager = new ProductManager('data/products.json');
 productManager.loadProducts();
@@ -17,17 +17,12 @@ router.get('/', (req, res) => {
 });
 
 // Ruta para obtener un producto por su ID
-router.get('/:pid', (req, res) => {
+router.get('/products', async (req, res) => {
     try {
-    const productId = parseInt(req.params.pid);
-    const product = productManager.getProductByID(productId);
-    if (product) {
-        res.json(product);
-    } else {
-        res.status(404).json({ error: 'Producto no encontrado' });
-    }
+    const products = await getAllProducts();
+    res.render('products', { products });
     } catch (error) {
-        res.status(500).json({ error: 'Error al obtener el producto' });
+    res.status(500).send('Error al obtener los productos.');
     }
 });
 
@@ -67,4 +62,4 @@ router.delete('/:pid', (req, res) => {
 });
 
 
-module.exports = router;
+export default router;

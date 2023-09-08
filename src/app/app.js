@@ -1,57 +1,30 @@
-// const express = require('express');
-// const ProductManager = require('../ProductManager/ProductManager');
-
-
-
-// const app = express();
-// const PORT = 8080;
-
-// const productManager = new ProductManager('data.json');
-// productManager.loadProducts();
-
-// // Ruta para obtener todos los productos con posible límite
-// app.get('/products', async (req, res) => {
-//   try {
-//     const limit = req.query.limit ? parseInt(req.query.limit) : undefined;
-//     const products = productManager.getProducts(limit);
-//     res.json(products);
-//   } catch (error) {
-//     res.status(500).json({ error: 'Error al obtener los productos' });
-//   }
-// });
-
-// // Ruta para obtener un producto por su ID
-// app.get('/products/:pid', async (req, res) => {
-//   try {
-//     const productId = parseInt(req.params.pid);
-//     const product = productManager.getProductByID(productId);
-//     if (product) {
-//       res.json(product);
-//     } else {
-//       res.status(404).json({ error: 'Producto no encontrado' });
-//     }
-//   } catch (error) {
-//     res.status(500).json({ error: 'Error al obtener el producto' });
-//   }
-// });
-
-// app.listen(PORT, () => {
-//   console.log(`Servidor corriendo en el puerto ${PORT}`);
-// });
-
-const express = require('express');
-const productRoutes = require('./routes/productRoutes');
-const cartRoutes = require('./routes/cartRoutes');
+import express, { json } from 'express';
+import productRoutes from './routes/productRoutes.js';
+import cartRoutes from './routes/cartRoutes.js';
+import viewsRoutes from '../app/view/views.js';
+import { connect } from 'mongoose';
 
 const app = express();
 const PORT = 8080;
 
-app.use(express.json());
+app.use(json());
 
+app.use('/', viewsRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
 });
+
+
+const mongoURI = 'mongodb+srv://happycriptos:TiC5aYJ7Xqm95mpS@cluster0.sxkqexk.mongodb.net/ecommerce';
+connect(mongoURI, { useNewUrlParser: true, useUnifiedTopology: true })
+  .then(() => {
+    console.log('Conexión exitosa a MongoDB');
+  })
+  .catch((error) => {
+    console.error('Error en la conexión a MongoDB:', error);
+  });
+
 

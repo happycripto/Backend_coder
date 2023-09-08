@@ -1,4 +1,4 @@
-const fs = require('fs');
+import { readFileSync, writeFileSync } from 'fs';
 
 class ProductManager {
     constructor() {
@@ -10,7 +10,7 @@ class ProductManager {
     loadProducts() {
         try {
             console.log('Ruta del archivo products.json:', this.path);
-            const data = fs.readFileSync(this.path, 'utf-8');
+            const data = readFileSync(this.path, 'utf-8');
             this.products = JSON.parse(data);
             this.productIdCounter = this.products.reduce((maxId, product) => Math.max(maxId, product.id), 0) + 1;
         } catch (error) {
@@ -23,7 +23,7 @@ class ProductManager {
     }
 
     saveProducts() {
-        fs.writeFileSync(this.path, JSON.stringify(this.products, null, 2), 'utf-8');
+        writeFileSync(this.path, JSON.stringify(this.products, null, 2), 'utf-8');
     }
     
     
@@ -152,4 +152,4 @@ productManager.deleteProduct(productIdToDelete);
 
 // Para correr codigo en node (node ProductManager.js)
 
-module.exports = ProductManager;
+export default ProductManager;
