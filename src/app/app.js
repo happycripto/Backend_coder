@@ -5,6 +5,7 @@ import exphbs from 'express-handlebars';
 import __dirname from './utils.js';
 import path from 'path';
 import viewsRoutes from '../app/view/views.js';
+import messageRoutes from './routes/messageRoutes.js'; // Importa tus rutas de mensajes
 import { connect } from 'mongoose';
 
 const app = express();
@@ -21,6 +22,9 @@ app.use(json());
 app.use('/', viewsRoutes);
 app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
+
+// Rutas de mensajes
+app.use('/api/messages', messageRoutes);
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);
