@@ -1,5 +1,5 @@
 import express from 'express';
-import { getAllProducts, getAllCarts } from '../dao/mongoDBManagers.js';
+import { getAllProducts, getAllCarts } from '../dao/Dao/mongoDBManagers.js';
 
 const router = express.Router();
 
@@ -12,14 +12,7 @@ const router = express.Router();
 //     }
 // });
 
-router.get('/carts', async (req, res) => {
-    try {
-    const carts = await getAllCarts();
-    res.render('carts', { carts });
-    } catch (error) {
-    res.status(500).send('Error al obtener los carritos.');
-    }
-});
+
 
 router.get('/messages', async (req, res) => {
     try {

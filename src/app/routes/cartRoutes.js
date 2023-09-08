@@ -41,15 +41,28 @@
 // module.exports = router;
 
 import { Router } from 'express';
-const router = Router();
 import { cartModel } from '../dao/models/cart.js';
+import { getAllCarts } from '../dao/Dao/mongoDBManagers.js';
+
+const router = Router();
+
+// Ruta para obtener todos los carritos
+router.get('/', async (req, res) => {
+  try {
+    const carts = await getAllCarts();
+    res.json({ carts });
+  } catch(error) {
+    console.error('Error al obtener los carritos:', error);
+    res.status(500).json({ error: 'Error al obtener los carritos' });
+  }
+});
 
 // Ruta para crear un nuevo carrito
 router.post('/', async (req, res) => {
   try {
     const newCart = req.body;
-    // Aquí puedes realizar cualquier lógica necesaria para validar o procesar el carrito antes de guardarlo
-    const createdCart = await cartModel.create(newCart); // Crea el carrito en la base de datos
+    // Crea el carrito en la base de datos
+    const createdCart = await cartModel.create(newCart);
     res.json({ message: 'Carrito creado exitosamente', cart: createdCart });
   } catch (error) {
     res.status(500).json({ error: 'Error al crear el carrito' });

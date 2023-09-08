@@ -1,6 +1,6 @@
-import { Product }  from '../dao/models/product.js';
-import Message from '../dao/models/message.js';
-import { cartModel } from './models/cart.js';
+import { Product }  from '../models/product.js';
+import Message from '../models/message.js';
+import { cartModel } from '../models/cart.js';
 
 export async function getAllProducts() {
     try {
