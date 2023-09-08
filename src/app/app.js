@@ -1,5 +1,5 @@
 import express, { json } from 'express';
-// import productRoutes from './routes/productRoutes.js';
+import productRoutes from './routes/productRoutes.js';
 import cartRoutes from './routes/cartRoutes.js';
 import exphbs from 'express-handlebars';
 import __dirname from './utils.js';
@@ -19,7 +19,7 @@ app.set('view engine', 'handlebars');
 app.use(json());
 
 app.use('/', viewsRoutes);
-// app.use('/api/products', productRoutes);
+app.use('/api/products', productRoutes);
 app.use('/api/carts', cartRoutes);
 
 app.listen(PORT, () => {
