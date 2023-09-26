@@ -1,45 +1,3 @@
-// const express = require('express');
-// const router = express.Router();
-// const fs = require('fs');
-
-// // Función para generar un ID único para el carrito
-// function generateUniqueCartId() {
-//   // Implementa la lógica para generar un ID único, por ejemplo, utilizando un timestamp
-//   return Date.now().toString();
-// }
-
-// // Función para guardar el carrito en "cart.json"
-// function saveCartToFile(cart) {
-//   const cartsData = loadCartsFromFile();
-//   cartsData.push(cart);
-//   fs.writeFileSync('data/cart.json', JSON.stringify(cartsData, null, 2), 'utf-8');
-// }
-
-// // Función para cargar los carritos desde el archivo "cart.json"
-// function loadCartsFromFile() {
-//   try {
-//     const data = fs.readFileSync('data/cart.json', 'utf-8');
-//     return JSON.parse(data);
-//   } catch (error) {
-//     return [];
-//   }
-// }
-
-// // Ruta para crear un nuevo carrito
-// router.post('/', (req, res) => {
-//   try {
-//     const newCart = req.body;
-//     const cartId = generateUniqueCartId();
-//     newCart.id = cartId;
-//     saveCartToFile(newCart);
-//     res.json({ message: 'Carrito creado exitosamente' });
-//   } catch (error) {
-//     res.status(500).json({ error: 'Error al crear el carrito' });
-//   }
-// });
-
-// module.exports = router;
-
 import { Router } from 'express';
 import { cartModel } from '../dao/models/cart.js';
 import { getAllCarts } from '../dao/Dao/mongoDBManagers.js';
@@ -57,18 +15,57 @@ router.get('/', async (req, res) => {
   }
 });
 
-// Ruta para crear un nuevo carrito
-router.post('/', async (req, res) => {
+// // Ruta para crear un nuevo carrito
+// router.post('/', async (req, res) => {
+//   try {
+//     const newCart = req.body;
+//     // Crea el carrito en la base de datos
+//     const createdCart = await cartModel.create(newCart);
+//     res.json({ message: 'Carrito creado exitosamente', cart: createdCart });
+//   } catch (error) {
+//     res.status(500).json({ error: 'Error al crear el carrito' });
+//   }
+// });
+
+
+// ... (otros imports y configuraciones)
+
+
+const routerCart = agregarAlCarrito();
+// Ruta para agregar un producto al carrito
+routerCart.post('/addToCart/:productId', async (req, res) => {
   try {
-    const newCart = req.body;
-    // Crea el carrito en la base de datos
-    const createdCart = await cartModel.create(newCart);
-    res.json({ message: 'Carrito creado exitosamente', cart: createdCart });
+      const productId = req.params.productId;
+
+      // Busca el producto en la base de datos
+      const product = await ProductModel.findById(productId);
+      if (!product) {
+          return res.status(404).json({ error: 'Producto no encontrado' });
+      }
+
+      // Verifica si el carrito ya existe o crea uno nuevo si no existe
+      let cart = await cartModel.findOne();
+      if (!cart) {
+          cart = new cartModel({ products: [] });
+      }
+
+      // Agrega el producto al carrito
+      cart.products.push({ productId: product._id, quantity: 1 });
+
+      // Guarda el carrito actualizado en la base de datos
+      await cart.save();
+
+      // Actualiza la representación visual del carrito o realiza cualquier otra acción necesaria
+
+      res.status(200).json({ message: 'Producto agregado al carrito con éxito' });
   } catch (error) {
-    res.status(500).json({ error: 'Error al crear el carrito' });
+      res.status(500).json({ error: 'Error al agregar el producto al carrito' });
   }
 });
 
 export default router;
+
+
+
 
 

@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon" href="#" />
+    <title>Lista de Productos</title>
+</head>
+<body>
+    <h1>Lista de Productos</h1>
+    <ul>
+        {{#each products}}
+        <li>
+            <p>Nombre: {{this.title}}, Precio: {{this.price}}, Stock: {{this.stock}}</p>
+            <button onclick="agregarAlCarrito('{{this.title}}')">Agregar al carrito</button>
+        </li>
+        {{/each}}
+    </ul>
+    {{#if hasPrevPage}}
+    <a href="/products?page={{prevPage}}"><button>Anterior</button></a>
+    {{/if}}
+    {{#if hasNextPage}}
+    <a href="/products?page={{nextPage}}"><button>Siguiente</button></a>
+    {{/if}}
+</body>
+</html>
+
+
+
+
