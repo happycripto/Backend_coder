@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+{{!-- <!DOCTYPE html>
 <html>
 <head>
     <link rel="shortcut icon" href="#" />
@@ -21,7 +21,43 @@
     <a href="/products?page={{nextPage}}"><button>Siguiente</button></a>
     {{/if}}
 </body>
+</html> --}}
+<!DOCTYPE html>
+<html>
+<head>
+    <link rel="shortcut icon" href="#" />
+    <title>Lista de Productos</title>
+    <script src="/src/app/views/views.js"></script>
+</head>
+<body>
+    <h1>Lista de Productos</h1>
+    <ul>
+        {{#each products}}
+        <li>
+            <p>Nombre: {{this.title}}, Precio: {{this.price}}, Stock: {{this.stock}}</p>
+            <label for="quantity">Cantidad:</label>
+            <input type="number" id="quantity-{{this._id}}" min="1" value="1">
+            {{!-- <button onclick="agregarAlCarrito('{{this.title}}')">Agregar al carrito</button> --}}
+            <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
+
+
+            
+        </li>
+        {{/each}}
+    </ul>
+    {{#if hasPrevPage}}
+    <a href="/products?page={{prevPage}}"><button>Anterior</button></a>
+    {{/if}}
+    {{#if hasNextPage}}
+    <a href="/products?page={{nextPage}}"><button>Siguiente</button></a>
+    {{/if}}
+
+
+
+
+</body>
 </html>
+
 
 
 

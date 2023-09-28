@@ -16,6 +16,7 @@ const hbs = exphbs.create({
 });
 
 // Configuración de Handlebars para las vistas
+app.use(express.static(path.join(__dirname, 'js')));
 app.engine('handlebars', hbs.engine);
 app.set('views', path.join(__dirname, 'views')); // Utiliza path.join para configurar la carpeta de vistas
 app.set('view engine', 'handlebars');
