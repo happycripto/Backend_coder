@@ -1,35 +1,12 @@
-{{!-- <!DOCTYPE html>
-<html>
-<head>
-    <link rel="shortcut icon" href="#" />
-    <title>Lista de Productos</title>
-</head>
-<body>
-    <h1>Lista de Productos</h1>
-    <ul>
-        {{#each products}}
-        <li>
-            <p>Nombre: {{this.title}}, Precio: {{this.price}}, Stock: {{this.stock}}</p>
-            <button onclick="agregarAlCarrito('{{this.title}}')">Agregar al carrito</button>
-        </li>
-        {{/each}}
-    </ul>
-    {{#if hasPrevPage}}
-    <a href="/products?page={{prevPage}}"><button>Anterior</button></a>
-    {{/if}}
-    {{#if hasNextPage}}
-    <a href="/products?page={{nextPage}}"><button>Siguiente</button></a>
-    {{/if}}
-</body>
-</html> --}}
 <!DOCTYPE html>
 <html>
 <head>
     <link rel="shortcut icon" href="#" />
     <title>Lista de Productos</title>
-    <script src="/src/app/views/views.js"></script>
+    <!-- Incluye la biblioteca de jQuery -->
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
-<body>
+<body data-port="{{PORT}}">
     <h1>Lista de Productos</h1>
     <ul>
         {{#each products}}
@@ -37,11 +14,7 @@
             <p>Nombre: {{this.title}}, Precio: {{this.price}}, Stock: {{this.stock}}</p>
             <label for="quantity">Cantidad:</label>
             <input type="number" id="quantity-{{this._id}}" min="1" value="1">
-            {{!-- <button onclick="agregarAlCarrito('{{this.title}}')">Agregar al carrito</button> --}}
-            <button onclick="addToCart('{{this._id}}')">Agregar al carrito</button>
-
-
-            
+            <button class="addToCartButton" data-productid="{{this._id}}">Agregar al carrito</button>
         </li>
         {{/each}}
     </ul>
@@ -52,11 +25,43 @@
     <a href="/products?page={{nextPage}}"><button>Siguiente</button></a>
     {{/if}}
 
+    <!-- Agrega el script jQuery -->
+    <script>
+        $(document).ready(function() {
+        // Agrega un manejador de eventos a los botones con la clase "addToCartButton"
+        $('.addToCartButton').click(function() {
+            // Obtiene el ID del producto del atributo de datos "data-productid"
+            const productId = $(this).data('productid');
+            
+            addToCart(productId); // Llama a addToCart con productId
+        });
+    });
 
-
-
+    function addToCart(productId) {
+        // Realiza una solicitud POST para agregar el producto al carrito
+        fetch(`/api/carts/addProductToCart/${productId}/1`, {
+            method: 'POST',
+        })
+        .then(async (response) => {
+            if (response.status === 200) {
+                alert('Producto agregado al carrito exitosamente.');
+            } else {
+                alert('Error al agregar el producto al carrito.');
+            }
+            // Asegúrate de que el carrito se haya creado antes de cualquier acción adicional
+            const cartData = await response.json();
+            console.log('Información del carrito:', cartData);
+        })
+        .catch((error) => {
+            console.error('Error al agregar el producto al carrito:', error);
+            alert('Error al agregar el producto al carrito.');
+        });
+    };
+    </script>   
 </body>
 </html>
+
+
 
 
 
