@@ -37,7 +37,8 @@ app.set('view engine', 'handlebars');
 app.use(json());
 
 app.use('/', viewsRoutes);
-app.use('/api/carts', cartRoutes); // Cambio de /products a /api/carts
+app.use('/api/carts', cartRoutes);
+app.use('/cart', cartRoutes);
 app.get('/Cookie', (req,res)=> {
   res.render('cookies')
 })
@@ -67,8 +68,6 @@ const connection = mongoose.connect('mongodb+srv://happycriptos:TiC5aYJ7Xqm95mpS
 app.post('/api/carts/products', async (req, res) => { // Cambio de 'products' a '/api/carts/products'
   try {
     const { cartId, productId } = req.params;
-    // Resto del código para agregar el producto al carrito...
-    // ...
     res.status(200).json({ message: 'Producto agregado al carrito exitosamente' });
   } catch (error) {
     console.error('Error al agregar producto al carrito:', error);

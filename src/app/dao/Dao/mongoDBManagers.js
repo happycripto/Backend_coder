@@ -55,12 +55,26 @@ export async function guardarMensaje(correoDelUsuario, mensajeDelUsuario) {
 
 export async function getAllCarts() {
     try {
-        const carts = await cartModel.find();
-        return carts;
+    //    carts = await cartModel.find();
+       let carts = await cartModel.find().populate('products.productId'); // Pobla los datos de los productos
+        carts = carts.map((doc) => doc.toObject());
+  
+      // Ajusta la estructura de los carritos para que tengan una propiedad "products" directa
+      carts = carts.map((cart) => ({
+        cartId: cart._id.toString(),
+        products: cart.products,
+      }));
+  
+      console.log(carts);
+  
+      return carts;
     } catch (error) {
-        throw new Error('Error al obtener los carritos de la base de datos.');
+        console.error('Error al obtener los carritos de la base de datos:', error); // Agregar esta línea
+      throw new Error('Error al obtener los carritos de la base de datos.');
     }
 }
+
+
 
 // Función para guardar el carrito en la base de datos
 export async function saveCartToDatabase(cart) {
@@ -110,3 +124,44 @@ export async function agregarProductoAlCarrito(productId, cantidad) {
     }
 }
 
+export async function actualizarCarrito(cartId, newProducts) {
+    try {
+        const cart = await cartModel.findById(cartId);
+
+        if (!cart) {
+        throw new Error('Carrito no encontrado');
+        }
+
+        cart.products = newProducts;
+        await cart.save();
+
+        return { message: 'Carrito actualizado exitosamente' };
+    } catch (error) {
+        throw new Error('Error al actualizar el carrito: ' + error.message);
+    }
+}
+
+export async function eliminarProductoDelCarrito(cartId, productId) {
+    try {
+        const cart = await cartModel.findById(cartId);
+
+        if (!cart) {
+        throw new Error('Carrito no encontrado');
+        }
+
+        const productIndex = cart.products.findIndex(
+        (item) => item.productId.equals(productId)
+        );
+
+        if (productIndex === -1) {
+        throw new Error('Producto no encontrado en el carrito');
+        }
+
+        cart.products.splice(productIndex, 1);
+        await cart.save();
+
+        return { message: 'Producto eliminado del carrito exitosamente' };
+    } catch (error) {
+        throw new Error('Error al eliminar producto del carrito: ' + error.message);
+    }
+}

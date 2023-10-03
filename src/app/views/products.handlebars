@@ -8,6 +8,8 @@
 </head>
 <body data-port="{{PORT}}">
     <h1>Lista de Productos</h1>
+    <div>
+    <a href="/cart"><button>Ver Carrito</button></a>    </div>
     <ul>
         {{#each products}}
         <li>
@@ -24,6 +26,7 @@
     {{#if hasNextPage}}
     <a href="/products?page={{nextPage}}"><button>Siguiente</button></a>
     {{/if}}
+    
 
     <!-- Agrega el script jQuery -->
     <script>
