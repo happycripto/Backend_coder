@@ -1,22 +1,6 @@
 import express  from 'express';
-import { ProductModel } from '../dao/models/product.js';
 
 const router = express.Router();
-
-// Ruta para obtener todos los productos con posible límite, paginación y ordenamiento
-// router.get('/products', async (req, res) => {
-//     try {
-//         const { page = 1 } = req.query;
-//         const { docs, hasPrevPage, hasNextPage, nextPage, prevPage } = await ProductModel.paginate({}, { limit: 5, page });
-
-//         res.render('products', { docs, hasPrevPage, hasNextPage, prevPage, nextPage });
-//     } catch (error) {
-//         res.status(500).json({ error: 'Error al obtener los productos' });
-//     }
-// });
-
-
-
 
 // Ruta para buscar un producto por su código
 router.get('/:code', async (req, res) => {

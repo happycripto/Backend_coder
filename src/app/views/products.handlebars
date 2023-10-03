@@ -7,6 +7,13 @@
     <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 </head>
 <body data-port="{{PORT}}">
+    <div>
+    <h1>Bienvenido, {{user.name}}</h1>
+    <p>Correo electrónico: {{user.email}}</p>
+    <p>Rol: {{user.role}}</p>
+    <a href="/logout">Logout</a>
+    </div>
+
     <h1>Lista de Productos</h1>
     <div>
     <a href="/cart"><button>Ver Carrito</button></a>    </div>
