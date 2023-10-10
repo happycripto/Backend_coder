@@ -9,6 +9,9 @@ import path from 'path'; // Importa el módulo path
 import viewsRoutes from './views/views.js';
 import messageRoutes from './routes/messageRoutes.js';
 import mongoose from 'mongoose';
+import passport from 'passport';
+import { initializePassport } from '../config/passport.js';
+
 
 const app = express();
 const PORT = 8080;
@@ -54,6 +57,10 @@ app.use('/cart', cartRoutes);
 app.get('/Cookie', (req,res)=> {
   res.render('cookies')
 })
+
+initializePassport();
+app.use(passport.initialize());
+app.use(passport.session());
 
 app.post('/cookie', (req,res)=> {
   const data = req.body;

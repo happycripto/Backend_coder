@@ -79,6 +79,10 @@ router.get('/logout', (req, res) => {
     });
 });
 
+router.get('/resetPassword', publicAccess, (req, res)=> {
+    res.render('resetPassword')
+})
+
 export default router;
 
 
