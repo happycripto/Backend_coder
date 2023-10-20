@@ -2,6 +2,7 @@ import { Router } from "express";
 import { userModel } from "../dao/models/user.js";
 import { createHash, isValidPassword } from "../utils.js";
 import passport from 'passport';
+import jwt from 'jsonwebtoken';
 
 
 const router = Router();
@@ -41,7 +42,15 @@ router.post('/login', passport.authenticate('login', {failureRedirect: '/failLog
     if (!req.user) {
         return res.status(400).send({status: "error", error: "Credenciales invalidas"});
     }
-    delete req.user.password;
+    const serializedUser = {
+        id: req.user._id,
+        name: `${req.user.first_name} ${req.user.last_name}`,
+        role: req.user.role,
+        email: req.user.email
+    }
+    const token = jwt.sign(serializedUser, 'coderSecret', {expiresIn: '1h'})
+    res.cookie('coderCookie', token, {maxAge: 3600000})
+    
     req.session.user = req.user;
     req.session.user = {
         name: `${req.user.first_name} ${req.user.last_name}`,
@@ -105,5 +114,7 @@ router.post('/restartPassword', async (req, res) => {
     const passwordHash = createHash(password);
     await userModel.updateOne({ email }, { $set: { password: passwordHash } })
 })
+
+
 
 export default router;

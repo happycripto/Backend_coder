@@ -1,5 +1,5 @@
 import express, { json } from 'express';
-import __dirname from './utils.js';
+import __dirname, { authToken } from './utils.js';
 import session from 'express-session';
 import MongoStore from 'connect-mongo';
 import sessionsRouter from '../app/routes/sessions.js'
@@ -71,6 +71,11 @@ app.post('/cookie', (req,res)=> {
 
 // Rutas de mensajes
 app.use('/api/messages', messageRoutes);
+
+app.get('/api/sessions/current', passport.authenticate('current', { session: false }), (req, res) => {
+  res.json({ user: req.user });
+});
+
 
 app.listen(PORT, () => {
   console.log(`Servidor corriendo en el puerto ${PORT}`);

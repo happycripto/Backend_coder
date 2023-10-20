@@ -1,8 +1,12 @@
 import passport from "passport";
 import local from "passport-local"
+import jwt from 'passport-jwt';
 import { userModel } from "../app/dao/models/user.js";
-import { createHash,isValidPassword } from "../app/utils.js";
+import { createHash,isValidPassword,cookieExtractor, } from "../app/utils.js";
 
+
+const JWTStrategy = jwt.Strategy;
+const ExtractJWT = jwt.ExtractJwt;
 const LocalStrategy = local.Strategy;
 export const initializePassport = () => {
     passport.use('register', new LocalStrategy({ passReqToCallback: true, usernameField: 'email' }, async (req, username, password, done) => {
@@ -51,4 +55,17 @@ export const initializePassport = () => {
         let user = await userModel.findById(id);
         done(null,user);
     })
+
+    passport.use('current', new JWTStrategy({
+        jwtFromRequest: ExtractJWT.fromExtractors([cookieExtractor]),
+        secretOrKey: 'coderSecret'
+    }, async(jwt_payload, done) => {
+        console.log(jwt_payload);
+        try {
+            return done(null, jwt_payload);
+        } catch (error) {
+            return done(error);
+        }
+    }))
+    
 }
